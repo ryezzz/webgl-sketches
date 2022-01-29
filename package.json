@@ -2,7 +2,7 @@
   "name": "webgl-sketches",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "kill -9 $(lsof -i:3000 -t) | next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
