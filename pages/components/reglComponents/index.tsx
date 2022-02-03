@@ -1,1 +1,1 @@
-export *  from './ReglContainer';   // re-export all of its exports
+export {ReglContainer} from './ReglContainer';   // re-export all of its exports
