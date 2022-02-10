@@ -1,14 +1,19 @@
 import React, { FC, useRef, useState, useEffect } from "react";
+import dynamic from 'next/dynamic';
 import regl, { ReglFrame } from "react-regl";
 import { mat4, vec4 } from "gl-matrix";
-import { PixiScatterplot } from "./PixiScatterplot";
-import * as d3 from "d3"
-import {loadData} from "../../hooks/customHooks"
+import { gsap } from "gsap";
+// import { PixiScatterplot } from "./PixiScatterplot";
+const PixiScatterplot = dynamic(
+  () => import("./PixiScatterplot"),
+  { ssr: false }
+)
 
-let dementions = {
-  height: 1000,
-  width: 1000,
-};
+import * as d3 from "d3";
+import { loadDataFromCsv, usePrevious } from "../../hooks/customHooks";
+
+let dataUrl =
+  "https://raw.githubusercontent.com/ryezzz/visualization-sketches/main/src/data/rye4_word_analysis.csv";
 
 interface TitleProps {
   title: string;
@@ -20,33 +25,76 @@ export const PixiScatterplotContainer: FC<TitleProps> = ({
   subtitle,
 }) => {
   let targetRef = useRef<HTMLCanvasElement>(null);
-  let canvasElement = useRef<HTMLCanvasElement>(null);
+  let containerRef = useRef<HTMLDivElement>(null);
+  let data = loadDataFromCsv(dataUrl);
+  const [currentDate, setCurrentDate] = useState("");
+  const prevDate = usePrevious(currentDate, "year");
 
-  console.log(loadData("https://raw.githubusercontent.com/ryezzz/visualization-sketches/main/src/data/rye4_word_analysis.csv"))
-  // useEffect(() => {
-  //   // if (initialCanvasRef.current && initialCanvasRef.current != null) {
-  //     setTargetRef(initialCanvasRef);
-  //   // }
 
-  // }, [initialCanvasRef]);
+  let dementions = {
+    height: 500,
+    width: 500,
+    marginleft: 20,
+    padding: 1,
+  };
 
-  // useRef<HTMLCanvasElement>(null)
+
+
+  useEffect(() => {
+    setCurrentDate("year")
+    },[])
+
+
+
+
+  let buttonNames = ["week", "month", "year"];
+
+  const Button = (buttonName: string, setFunction: Function) => {
+    function onClick(e: { target: { value: any } }) {
+      setFunction(e.target.value);
+    }
+    return (
+      <button key={Math.random()} value={buttonName} onClick={onClick as any}>
+        {buttonName}
+      </button>
+    );
+  };
 
   return (
     <>
-      <button>week</button>
-      <button>year</button>
       <h1>{title}</h1>
       <h2>{subtitle}</h2>
-      <canvas ref={targetRef}></canvas>
-      <canvas ref={canvasElement}></canvas>
+      <div id={"#tooltipDivLight"}></div>
+      {data.length > 0 ? (
 
-      <PixiScatterplot
-        dementions={dementions}
-        canvaselement={canvasElement}
-        targetref={targetRef}
-        background={"white"}
-      ></PixiScatterplot>
+        <div
+          ref={containerRef}
+          style={{ border: "solid 2px white", width: " 100%", height: "70vh" }}
+        >
+
+          {buttonNames.map((buttonName) => Button(buttonName, setCurrentDate))}
+
+          <PixiScatterplot
+            data={data as any}
+            dementions={dementions}
+            targetref={targetRef}
+            background={"white"}
+            selecteddate={currentDate}
+            previousdate={prevDate}
+            selectedvalue={"entry_word_count"}
+            linewidth={2}
+            circlecolor="blue"
+            containeref={containerRef}
+            useEffect={useEffect}
+            useState={useState}
+            useRef={useRef}
+            React={React}
+            gsap={gsap}
+          ></PixiScatterplot>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
     </>
   );
 };

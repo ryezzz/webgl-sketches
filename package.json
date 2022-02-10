@@ -9,8 +9,16 @@
   },
   "dependencies": {
     "@inlet/react-pixi": "^6.6.5",
+    "@types/react-dom": "^17.0.11",
+    "@visx/group": "^2.1.0",
+    "@visx/mock-data": "^2.1.2",
+    "@visx/scale": "^2.2.2",
+    "@visx/shape": "^2.4.0",
+    "axios": "^0.25.0",
     "d3": "^7.3.0",
+    "d3-delaunay": "^6.0.2",
     "gl-matrix": "^3.4.3",
+    "gsap": "^3.9.1",
     "hsv2rgb": "^1.1.0",
     "next": "12.0.9",
     "pixi.js": "^6.2.2",
@@ -20,13 +28,17 @@
     "react-pixi": "^0.9.19",
     "react-regl": "^4.3.5",
     "regl": "^2.1.0",
-    "regl-scatterplot": "^1.1.0"
+    "regl-scatterplot": "^1.1.0",
+    "roughjs": "^4.5.2",
+    "swr": "^1.2.1",
+    "use-d3-transition": "^1.2.0"
   },
   "devDependencies": {
+    "@types/d3": "^7.1.0",
     "@types/node": "17.0.13",
-    "@types/react": "17.0.38",
+    "@types/react": "^17.0.39",
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.9",
-    "typescript": "4.5.5"
+    "typescript": "4.5.4"
   }
 }
